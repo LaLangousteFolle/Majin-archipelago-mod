@@ -9,29 +9,21 @@ a randomizer for it.
 
 So here's the roadmap:
 
+## ╭──────────────────────────────────────────────────────────────╮
+## │                            ROADMAP                           │
+## ╰──────────────────────────────────────────────────────────────╯
 
-╭──────────────────────────────────────────────────────────────╮
-│                             ROADMAP                          │
-╰──────────────────────────────────────────────────────────────╯
-
-  [🚧] ──► Reverse engineering / Game research (this is looong as hell TwT)
-   │
-  [ ] ──► Basic item randomization
-   │
-  [ ] ──► Archipelago integration
-   │
-  [ ] ──► Location / check system
-   │
-  [ ] ──► Config & options
-   │
-  [ ] ──► Testing & bug fixing
-   │
-  [ ] ──► First playable release
-   │
-  [ ] ──► More advanced features
-   │
-  [ ] ──► ~~Be a competent modder~~
-
+| Status | Roadmap |
+|:---:|---|
+| 🚧 | Reverse engineering / Game research (this is looong as hell TwT) |
+| ⬜ | Basic item randomization |
+| ⬜ | Archipelago integration |
+| ⬜ | Location / check system |
+| ⬜ | Config & options |
+| ⬜ | Testing & bug fixing |
+| ⬜ | First playable release |
+| ⬜ | More advanced features |
+| ⬜ | ~~Be a competent modder~~ |
 
 > **Legend**
 > - [x] Done
@@ -39,22 +31,30 @@ So here's the roadmap:
 > - 🚧 Currently working on
 > - ~~Cancelled / unrealistic~~
 
-╭──────────────────────────────────────────────────────────────╮
-│                        CURRENT FOCUS                         │
-╰──────────────────────────────────────────────────────────────╯
-Currently working on where coulf the items be in the ROM memory, might be taking a while as I am learning as I'm going. Right now I'm able to:
+## ╭──────────────────────────────────────────────────────────────╮
+## │                        CURRENT FOCUS                         │
+## ╰──────────────────────────────────────────────────────────────╯
+
+Currently working on where coulf the items be in the ROM memory, might
+be taking a while as I am learning as I'm going. Right now I'm able to:
+
 - Locate where Tepeu EXP is stored
 - Interact with Tepeu amount of EXP
-[KNOW ISSUES]
-- The amount of EXP don't actualize until u get some normally (by opening a chest or killing an ennemy) once that done the level increase should be working.
 
-╭──────────────────────────────────────────────────────────────╮
-│                            APWORLD                           │
-╰──────────────────────────────────────────────────────────────╯
+**[KNOW ISSUES]**
+
+- The amount of EXP don't actualize until u get some normally (by opening
+  a chest or killing an ennemy) once that done the level increase should
+  be working.
+
+## ╭──────────────────────────────────────────────────────────────╮
+## │                            APWORLD                           │
+## ╰──────────────────────────────────────────────────────────────╯
+
 The game should have around **~170 checks**, currently planned as:
 
 | Check | Amount |
-| --- | ---: |
+|---|---:|
 | Memory shards | 35 |
 | EXP shard chests | 79 |
 | Tepeu cosmetic chests | 18 |
