@@ -1,0 +1,7 @@
+name: Nono
+game: Majin and the Forsaken Kingdom
+description: Exemple de YAML pour Majin and the Forsaken Kingdom
+
+Majin and the Forsaken Kingdom:
+  # false = les pouvoirs restent donnés par l'histoire (V1), true = ils entrent dans le pool (V2)
+  shuffle_powers: false
