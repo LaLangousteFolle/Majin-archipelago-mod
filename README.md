@@ -1,57 +1,55 @@
-# Majin-archipelago-mod
+# Majin and the Forsaken Kingdom Archipelago Mod
 
-This is my first Archipelago mod, and my first real game modification
-in general so please be gentle >:3c
+> An Archipelago randomizer mod for **Majin and the Forsaken Kingdom**, currently in development.
 
-More seriously, I am a real newbie at this and still struggle with
-CHEAT ENGINE. But I love this game and would absolutely love to make
-a randomizer for it.
+This is my first Archipelago mod and my first real game modification, so please be gentle >:3c
 
-So here's the roadmap:
+More seriously, I'm still very new to game modding and am currently learning my way around **Cheat Engine**. I love this game, though, and I'd absolutely love to turn it into a proper randomizer.
 
-## ╭──────────────────────────────────────────────────────────────╮
-## │                            ROADMAP                           │
-## ╰──────────────────────────────────────────────────────────────╯
+---
 
-| Status | Roadmap |
+## 🗺️ Roadmap
+
+| Status | Milestone |
 |:---:|---|
-| 🚧 | Reverse engineering / Game research (this is looong as hell TwT) |
+| 🚧 | Reverse engineering / game research |
 | ⬜ | Basic item randomization |
 | ⬜ | Archipelago integration |
 | ⬜ | Location / check system |
-| ⬜ | Config & options |
+| ⬜ | Configuration & options |
 | ⬜ | Testing & bug fixing |
 | ⬜ | First playable release |
 | ⬜ | More advanced features |
-| ⬜ | ~~Be a competent modder~~ |
+| ⬜ | ~~Become a competent modder~~ |
 
-> **Legend**
-> - [x] Done
-> - [ ] Planned
-> - 🚧 Currently working on
-> - ~~Cancelled / unrealistic~~
+**Legend**
 
-## ╭──────────────────────────────────────────────────────────────╮
-## │                        CURRENT FOCUS                         │
-## ╰──────────────────────────────────────────────────────────────╯
+- 🚧 Currently working on
+- ⬜ Planned
+- ~~Cancelled / unrealistic~~
 
-Currently working on where coulf the items be in the ROM memory, might
-be taking a while as I am learning as I'm going. Right now I'm able to:
+---
+
+## 🔬 Current Focus
+
+I'm currently working on finding where the game's items and values are stored in ROM memory. This might take a while, as I'm learning as I go.
+
+### Currently Working On
 
 - Locate where Tepeu EXP is stored
-- Interact with Tepeu amount of EXP
+- Interact with Tepeu's EXP amount
 
-**[KNOW ISSUES]**
+### Known Issues
 
-- The amount of EXP don't actualize until u get some normally (by opening
-  a chest or killing an ennemy) once that done the level increase should
-  be working.
+- The EXP amount does not update immediately when modified.
+- The game only appears to recognize the new value after gaining EXP normally, such as by opening a chest or defeating an enemy.
+- Once that happens, the level increase should work correctly.
 
-## ╭──────────────────────────────────────────────────────────────╮
-## │                            APWORLD                           │
-## ╰──────────────────────────────────────────────────────────────╯
+---
 
-The game should have around **~170 checks**, currently planned as:
+## 🌐 APWorld
+
+The game should have **169 checks**, currently planned as:
 
 | Check | Amount |
 |---|---:|
@@ -68,21 +66,23 @@ The game should have around **~170 checks**, currently planned as:
 | Boss masks | 4 |
 | **Total** | **169** |
 
-> \* Not counting the Life Fruit used to free the Majin.
+> * Not counting the Life Fruit used to free the Majin.
 
-### OPTIONAL / FUTURE FEATURES
+---
 
-Some things I'd like to implement eventually, but I'm not quite
-experienced enough with the game yet:
+## ✨ Optional / Future Features
+
+Some features I'd like to implement eventually, but I currently lack the experience and knowledge required to do so:
 
 - [ ] Randomize the main power fruit
 - [ ] Add teleport rooms as locations/items
-- [ ] Add fast travel progression between zones
+- [ ] Add fast-travel progression between zones
 
-### POSSIBLE ADDITIONAL CHECKS
+---
 
-If the game supports them cleanly, these could become additional
-Archipelago locations:
+## 🔍 Possible Additional Checks
+
+If the game supports them cleanly, these could become additional Archipelago locations:
 
 - [ ] Animal dialogues
 - [ ] Using statues for the first time
@@ -90,6 +90,12 @@ Archipelago locations:
 - [ ] Defeating each enemy type
 - [ ] Achievements
 
-### GOAL
+---
+
+## 🎯 Goal
 
 **Defeat the King.**
+
+---
+
+*This project is a work in progress. Expect bugs, questionable decisions, and an unhealthy amount of Cheat Engine.*
