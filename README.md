@@ -10,7 +10,6 @@ a randomizer for it.
 So here's the roadmap:
 
 
-```text
 ╭──────────────────────────────────────────────────────────────╮
 │                             ROADMAP                          │
 ╰──────────────────────────────────────────────────────────────╯
@@ -91,6 +90,6 @@ Archipelago locations:
 - [ ] Defeating each enemy type
 - [ ] Achievements
 
-## GOAL
+### GOAL
 
 **Defeat the King.**
