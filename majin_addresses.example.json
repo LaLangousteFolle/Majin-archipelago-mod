@@ -1,0 +1,14 @@
+{
+  "_comment": "Exemple. memdiff.py écrit ce fichier pour toi (majin_addresses.json, à la racine d'Archipelago).",
+  "base": 0,
+  "xp": "0x2BCA16D40",
+  "xp_per_life_shards": 50,
+  "goal_flag": {"address": "0x2BCA10123", "mask": "0x01"},
+  "location_flags": {
+    "Graveyard - Life Chest 1": {"address": "0x2BCA10000", "mask": "0x04"},
+    "Caprakan Defeated": {"address": "0x2BCA10010", "mask": "0x01", "invert": true}
+  },
+  "item_effects": {
+    "Stamina Fruit": {"kind": "add", "address": "0x2BCA10200", "size": 4, "amount": 1}
+  }
+}

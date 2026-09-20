@@ -22,20 +22,27 @@ POWERS: dict[str, str] = {
     "P": "Purification Power",
 }
 
-# Boss n is fought at the end of this zone. The next zone opens once it is beaten.
-BOSS_ZONES: dict[int, int] = {1: 4, 2: 9, 3: 12, 4: 18}
-# Powers are required cumulatively: boss n needs the first n powers (conservative, never softlocks).
-BOSS_REQUIREMENTS: dict[int, str] = {1: "W", 2: "WL", 3: "WLF", 4: "WLFP"}
-FINAL_ZONE = 21
-FINAL_BOSS_REQUIREMENT = "WLFP"
+class Boss(NamedTuple):
+    name: str
+    region: str  # region where the fight happens (last region before the seal that it opens)
+    requirements: str  # power letters needed to win (cumulative on purpose: never softlocks)
 
-# Where the story hands each power to the player (zone, area name).
-# NOTE: the Purification spot is a best guess from the guide and has to be confirmed in game.
-POWER_SPOTS: dict[str, tuple[int, str]] = {
-    "W": (4, "Graveyard"),
-    "L": (9, "Experimental Wing"),
-    "F": (11, "Ravine Dig Site"),
-    "P": (17, "Tanya Mafta City"),
+
+# Names verified against the trophy list; order verified against the Karmikazzee walkthrough (GameFAQs).
+BOSSES: dict[int, Boss] = {
+    1: Boss("Caprakan", "Excavation Site", "W"),  # Moccoi Ruins - Great Temple, right after the Excavation Site
+    2: Boss("B'alam", "Experimental Wing", "WL"),  # Great Tree Malawa - Antenna
+    3: Boss("Tlaloc", "Chibirias Engine", "WLF"),  # Chibirias - Bow, after the Engine
+    4: Boss("Ixtab", "Crystal Palace Interior", "WLFP"),  # Blue Crystal Cavern
+}
+FINAL_BOSS = Boss("Xolotl", "Arkela Castle Grand Staircase", "WLFP")  # Arkela Castle - Chapel
+
+# Where the story hands each power to the player (area name). Confirmed by the player and the walkthrough.
+POWER_SPOTS: dict[str, str] = {
+    "W": "Graveyard",
+    "L": "Research Wing",
+    "F": "Chibirias Stern",
+    "P": "Crystal Palace Courtyard",
 }
 
 
@@ -76,14 +83,14 @@ AREAS: list[Area] = [
          costume=(("Scholar's Hat", ""), ("Bandit's Manifer", "FL")), upgrade=(("F", "F"),)),
     Area(6, "Tangalo'a Swamp", life=("", ""), memory=("",), stamina=("L",), upgrade=(("W", "L"),)),
     # Zone 7
-    Area(7, "Kanay Valley", life=("",), memory=("",), strength=("",)),
+    Area(7, "Kanay Valley", life=("", ""), memory=("",), strength=("",)),
     Area(7, "Wana Mu'bi Fortress", life=("", ""), memory=("",), costume=(("Scholar's Cuff", ""),),
          stamina=("",)),
     # Zone 8
     Area(8, "Royal Garden", life=("", ""), memory=("",), upgrade=(("W", ""),)),
     # Zone 9 (lightning power, boss 2)
     Area(9, "Research Wing", life=("", ""), memory=("",), strength=("",)),
-    Area(9, "Experimental Wing", life=("L", "L"), memory=("L",), costume=(("", "L"),), stamina=("L",)),
+    Area(9, "Experimental Wing", life=("", ""), memory=("",), costume=(("", ""),), stamina=("",)),
     # Zone 10
     Area(10, "Pualata Cargo Shed", life=("",), memory=("",)),
     Area(10, "Dudugera Way", life=("", ""), memory=("",), strength=("",)),
@@ -129,12 +136,68 @@ AREAS: list[Area] = [
          upgrade=(("P", ""),)),
 ]
 
-ZONE_COUNT = max(a.zone for a in AREAS)
+class RouteNode(NamedTuple):
+    """A region of the game. parent: where you come from (None = start of the game).
+    gate_boss: a boss that must be beaten to enter. entry: powers needed to enter.
+    Order and connections follow the actual game (Karmikazzee walkthrough), not the collectible guide sections."""
+
+    name: str
+    parent: str | None
+    gate_boss: int | None = None
+    entry: str = ""
+    areas: tuple[str, ...] = ()  # collectible areas inside; defaults to (name,)
 
 
-def zone_region_name(zone: int) -> str:
-    names = " + ".join(a.name for a in AREAS if a.zone == zone)
-    return f"Zone {zone:02d}: {names}"
+ROUTE: list[RouteNode] = [
+    RouteNode("Arkela Castle Start", None, areas=("Underground Storehouse", "Royal Chambers", "Corridor")),
+    RouteNode("Arkela Castle Gate", "Arkela Castle Start"),
+    RouteNode("Ungdo Flower Patch", "Arkela Castle Gate"),
+    RouteNode("Tagalo Forest Checkpoint", "Ungdo Flower Patch"),
+    RouteNode("Toto Waterfall Power Plant", "Tagalo Forest Checkpoint"),
+    RouteNode("B'alam Laboratory", "Toto Waterfall Power Plant"),
+    RouteNode("Potrachi Altar", "Toto Waterfall Power Plant"),
+    RouteNode("Graveyard", "Potrachi Altar"),
+    RouteNode("Excavation Site", "Graveyard", entry="W"),
+    RouteNode("Hawme'a Falls", "Excavation Site", gate_boss=1),
+    RouteNode("Denguey Forest Tower", "Hawme'a Falls"),
+    RouteNode("Pele Bridge", "Denguey Forest Tower"),
+    RouteNode("Tangalo'a Swamp", "Denguey Forest Tower"),
+    RouteNode("Kanay Valley", "Tangalo'a Swamp"),
+    RouteNode("Wana Mu'bi Fortress", "Kanay Valley"),
+    RouteNode("Royal Garden", "Wana Mu'bi Fortress"),
+    RouteNode("Research Wing", "Wana Mu'bi Fortress"),
+    RouteNode("Experimental Wing", "Research Wing", entry="L"),
+    # The room of transport opened by boss 2 leads back to Potrachi Altar, then to the cargo shed
+    RouteNode("Pualata Cargo Shed", "Potrachi Altar", gate_boss=2),
+    RouteNode("Dudugera Way", "Pualata Cargo Shed"),
+    RouteNode("Ravine Dig Site", "Dudugera Way"),
+    RouteNode("Naval Equipment Warehouse", "Ravine Dig Site"),
+    RouteNode("Kingdom Navy Headquarters", "Naval Equipment Warehouse"),
+    RouteNode("Iron Factory", "Kingdom Navy Headquarters"),
+    RouteNode("Earth Furnace", "Iron Factory"),
+    RouteNode("Chibirias Stern", "Earth Furnace"),
+    RouteNode("Chibirias Engine", "Chibirias Stern", entry="F"),
+    RouteNode("Koom Honu'a Passage", "Earth Furnace", gate_boss=3),
+    RouteNode("Moonglow Cave", "Koom Honu'a Passage"),
+    RouteNode("Koonapipi Mines", "Moonglow Cave"),
+    RouteNode("Four Windmills Hill", "Koonapipi Mines"),
+    RouteNode("Tanya Mafta City", "Koonapipi Mines"),
+    RouteNode("Tu Kabinana Residence", "Tanya Mafta City"),
+    RouteNode("Crystal Palace Courtyard", "Moonglow Cave"),
+    RouteNode("Crystal Palace Interior", "Crystal Palace Courtyard", entry="P"),
+    RouteNode("Loll'ur River", "Tanya Mafta City", gate_boss=4),
+    RouteNode("Arkela Castle Courtyard", "Loll'ur River"),
+    RouteNode("Arkela Castle Hall", "Arkela Castle Courtyard"),
+    RouteNode("Arkela Castle Main Tower", "Arkela Castle Hall"),
+    RouteNode("Arkela Castle Grand Staircase", "Arkela Castle Main Tower"),
+]
+
+AREA_TO_REGION: dict[str, str] = {}
+for _node in ROUTE:
+    for _area in (_node.areas or (_node.name,)):
+        AREA_TO_REGION[_area] = _node.name
+assert set(AREA_TO_REGION) == {a.name for a in AREAS}, "every area must belong to exactly one region"
+assert len({n.name for n in ROUTE}) == len(ROUTE), "duplicate region names"
 
 
 def power_names(letters: str) -> frozenset[str]:
@@ -143,7 +206,7 @@ def power_names(letters: str) -> frozenset[str]:
 
 class LocationData(NamedTuple):
     name: str
-    zone: int
+    region: str
     category: str
     requirements: frozenset[str]
     missable: bool = False
@@ -158,28 +221,28 @@ def _build_locations() -> list[LocationData]:
     for area in AREAS:
         for i, req in enumerate(area.life, 1):
             result.append(LocationData(f"{area.name} - {_numbered('Life Chest', len(area.life), i)}",
-                                       area.zone, "Life Chests", power_names(req), area.missable))
+                                       AREA_TO_REGION[area.name], "Life Chests", power_names(req), area.missable))
         for i, req in enumerate(area.memory, 1):
             result.append(LocationData(f"{area.name} - {_numbered('Memory Shard', len(area.memory), i)}",
-                                       area.zone, "Memory Shards", power_names(req), area.missable))
+                                       AREA_TO_REGION[area.name], "Memory Shards", power_names(req), area.missable))
         for i, (piece, req) in enumerate(area.costume, 1):
             label = f"Costume Chest ({piece})" if piece else _numbered("Costume Chest", len(area.costume), i)
-            result.append(LocationData(f"{area.name} - {label}", area.zone, "Costume Chests",
+            result.append(LocationData(f"{area.name} - {label}", AREA_TO_REGION[area.name], "Costume Chests",
                                        power_names(req), area.missable))
         for i, req in enumerate(area.stamina, 1):
             result.append(LocationData(f"{area.name} - {_numbered('Stamina Fruit', len(area.stamina), i)}",
-                                       area.zone, "Stamina Fruits", power_names(req), area.missable))
+                                       AREA_TO_REGION[area.name], "Stamina Fruits", power_names(req), area.missable))
         for i, req in enumerate(area.strength, 1):
             result.append(LocationData(f"{area.name} - {_numbered('Strength Fruit', len(area.strength), i)}",
-                                       area.zone, "Strength Fruits", power_names(req), area.missable))
+                                       AREA_TO_REGION[area.name], "Strength Fruits", power_names(req), area.missable))
         for power, req in area.upgrade:
             result.append(LocationData(f"{area.name} - {POWERS[power].split()[0]} Upgrade Fruit",
-                                       area.zone, "Upgrade Fruits", power_names(req), area.missable))
-    for letter, (zone, area_name) in POWER_SPOTS.items():
-        result.append(LocationData(f"{area_name} - {POWERS[letter]}", zone, "Powers", frozenset()))
-    for boss, zone in BOSS_ZONES.items():
-        result.append(LocationData(f"Boss {boss} Defeated", zone, "Bosses",
-                                   power_names(BOSS_REQUIREMENTS[boss])))
+                                       AREA_TO_REGION[area.name], "Upgrade Fruits", power_names(req), area.missable))
+    for letter, area_name in POWER_SPOTS.items():
+        result.append(LocationData(f"{area_name} - {POWERS[letter]}", AREA_TO_REGION[area_name], "Powers",
+                                   frozenset()))
+    for boss in BOSSES.values():
+        result.append(LocationData(f"{boss.name} Defeated", boss.region, "Bosses", power_names(boss.requirements)))
     return result
 
 
